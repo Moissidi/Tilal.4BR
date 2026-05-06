@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { 
   ChevronRight, 
   ChevronLeft, 
@@ -17,15 +17,10 @@ import {
   Cpu,
   X,
   List,
-  FileText,
-  Map,
   Phone,
   MessageCircle,
-  Scaling,
-  BarChart3,
   Clock,
   MapPin,
-  Lock,
   ExternalLink
 } from 'lucide-react';
 
@@ -34,7 +29,7 @@ const App = () => {
   const [view, setView] = useState('presentation'); // 'presentation' | 'details'
   
   // Modal State for Images
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   
   // Presentation States
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -265,7 +260,8 @@ const App = () => {
     setTimeout(() => setIsAnimating(false), 800);
   };
 
-  const openDetailsPage = (villaType) => {
+  // FIX: typed parameter
+  const openDetailsPage = (villaType: 'oasis' | 'dunes') => {
     setActiveVilla(villaType);
     setView('details');
   };
@@ -307,7 +303,8 @@ const App = () => {
           {/* Slides: Masterplan & Superiority */}
           {(slide.id === 'masterplan' || slide.id === 'superiority') && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full mt-4">
-              {slide.stats.map((stat, i) => (
+              {/* FIX: optional chaining */}
+              {slide.stats?.map((stat, i) => (
                 <div key={i} className="interactive-card p-8 flex flex-col items-center justify-center">
                   <div className="text-[#c8a96e] mb-6 opacity-80">
                     {stat.icon}
@@ -326,7 +323,8 @@ const App = () => {
           {/* Slide: Proximity */}
           {slide.id === 'proximity' && (
             <div className="w-full mt-4 max-w-3xl mx-auto flex flex-col items-center space-y-3 pb-12 animate-fade-in">
-              {slide.locations.map((loc, i) => (
+              {/* FIX: optional chaining */}
+              {slide.locations?.map((loc, i) => (
                 <div 
                   key={i} 
                   className="w-full flex items-center justify-between px-8 py-5 rounded-full border border-[#c8a96e]/10 bg-gradient-to-r from-[#080a06]/80 to-[#c8a96e]/5 backdrop-blur-md hover:border-[#c8a96e]/30 hover:bg-[#c8a96e]/10 transition-all duration-300 group"
@@ -375,16 +373,19 @@ const App = () => {
                 </div>
               </div>
               <div className="flex flex-wrap justify-center gap-4 mb-6">
-                {slide.pricingInfo.plans.map((plan, i) => (
+                {/* FIX: optional chaining */}
+                {slide.pricingInfo?.plans.map((plan, i) => (
                   <button key={i} onClick={() => setActivePlan(i)} className={`px-6 py-3 text-[0.6rem] tracking-[0.3em] uppercase transition-all duration-300 border ${activePlan === i ? 'border-[#c8a96e] bg-[#c8a96e]/10 text-[#c8a96e]' : 'border-[#1e2019] text-[#6a6b57] hover:border-[#c8a96e]/50 hover:text-[#ede0c4]'}`}>{plan.name}</button>
                 ))}
               </div>
               <button onClick={() => setShowTable(!showTable)} className="mb-10 flex items-center gap-2 text-[0.6rem] tracking-[0.3em] uppercase text-[#c8a96e] border border-[#c8a96e]/30 px-6 py-3 hover:bg-[#c8a96e]/10 transition-colors"><List size={14} /> {showTable ? "View Summary" : "View Detailed Schedule"}</button>
               <div key={activePlan} className="w-full animate-fade-in flex flex-col items-center pb-12">
-                <p className="text-sm md:text-base text-[#ede0c4] opacity-70 mb-10 max-w-2xl text-center">{slide.pricingInfo.plans[activePlan].description}</p>
+                {/* FIX: optional chaining */}
+                <p className="text-sm md:text-base text-[#ede0c4] opacity-70 mb-10 max-w-2xl text-center">{slide.pricingInfo?.plans[activePlan].description}</p>
                 {!showTable ? (
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
-                    {slide.pricingInfo.plans[activePlan].breakdown.map((item, i) => (
+                    {/* FIX: optional chaining */}
+                    {slide.pricingInfo?.plans[activePlan].breakdown.map((item, i) => (
                       <div key={i} className="interactive-card p-6 md:p-8 flex flex-col items-center text-center">
                         <h4 className="serif-font text-5xl md:text-6xl text-[#c8a96e] mb-2">{item.percentage}%</h4>
                         <p className="text-xl md:text-2xl text-white mb-4">{new Intl.NumberFormat('en-AE', { style: 'currency', currency: 'AED', maximumFractionDigits: 0 }).format((propertyValue * item.percentage) / 100)}</p>
@@ -409,7 +410,8 @@ const App = () => {
                         <tbody>
                           {(() => {
                             let cumulative = 0;
-                            return slide.pricingInfo.plans[activePlan].schedule.map((row, idx) => {
+                            // FIX: optional chaining
+                            return slide.pricingInfo?.plans[activePlan].schedule.map((row, idx) => {
                               cumulative += row.p;
                               return (
                                 <tr key={idx} className="border-b border-[#1e2019] hover:bg-[#c8a96e]/10 transition-colors">
@@ -444,7 +446,8 @@ const App = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {slide.matrix.map((row, idx) => (
+                    {/* FIX: optional chaining */}
+                    {slide.matrix?.map((row, idx) => (
                       <tr key={idx} className="border-b border-[#1e2019] hover:bg-[#c8a96e]/10 transition-colors group">
                         <td className="py-5 px-6 text-xs md:text-sm text-[#ede0c4] font-medium tracking-wide whitespace-nowrap">{row.type}</td>
                         <td className="py-5 px-6 text-base md:text-lg text-[#c8a96e] text-right font-serif tracking-wide group-hover:scale-105 transition-transform origin-right">
@@ -474,7 +477,8 @@ const App = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {slide.comparisonMatrix.map((row, idx) => (
+                    {/* FIX: optional chaining */}
+                    {slide.comparisonMatrix?.map((row, idx) => (
                       <tr 
                         key={idx} 
                         className={`border-b border-[#1e2019] transition-all duration-300 relative group
@@ -521,7 +525,6 @@ const App = () => {
                     <h3 className="serif-font text-5xl text-white mb-2 leading-tight">The Oasis</h3>
                     <p className="text-[0.6rem] tracking-[0.4em] text-[#c8a96e] uppercase font-semibold">Heart of the community</p>
                   </div>
-                  
                   <div className={`flex flex-col transition-all duration-1000 delay-100 flex-grow ${activeVilla === 'oasis' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                     <div className="mt-10">
                        <div className="w-16 h-[1px] bg-[#c8a96e] mb-4" />
@@ -554,7 +557,6 @@ const App = () => {
                     <h3 className="serif-font text-5xl text-white mb-2 leading-tight">The Dunes</h3>
                     <p className="text-[0.6rem] tracking-[0.4em] text-[#c8a96e] uppercase font-semibold">Comfort & Active Life</p>
                   </div>
-                  
                   <div className={`flex flex-col transition-all duration-1000 delay-100 flex-grow ${activeVilla === 'dunes' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                     <div className="mt-10">
                        <div className="w-16 h-[1px] bg-[#c8a96e] mb-4" />
@@ -585,14 +587,14 @@ const App = () => {
             <div className="w-full mt-4 max-w-4xl mx-auto flex flex-col items-center animate-fade-in pb-12">
               <div className="w-[1px] h-12 bg-gradient-to-b from-[#c8a96e] to-transparent mx-auto mb-8" />
               <div className="flex flex-col items-center group">
-                {/* PROFILE PICTURE UPDATE */}
                 <div className="relative w-40 h-40 mb-8 p-1.5 rounded-full border border-[#c8a96e]/30 bg-[#c8a96e]/5 group-hover:border-[#c8a96e] transition-all duration-500 overflow-hidden shadow-2xl">
                   <div className="w-full h-full rounded-full border border-[#c8a96e]/10 overflow-hidden bg-[#080a06]">
                     <img 
                       src={PROFILE_PIC} 
-                      alt={slide.advisor.name} 
+                      alt={slide.advisor?.name} 
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      onError={(e) => { e.target.style.display = 'none'; }}
+                      // FIX: cast EventTarget to HTMLImageElement
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                     />
                     {!PROFILE_PIC && (
                       <div className="text-[#c8a96e]/20 font-light text-[0.5rem] tracking-[0.2em] uppercase text-center p-4">Photo<br/>Placeholder</div>
@@ -600,12 +602,12 @@ const App = () => {
                   </div>
                   <div className="absolute top-0 right-0 w-12 h-12 bg-[#c8a96e]/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                 </div>
-                
-                <h4 className="serif-font text-3xl text-white mb-1">{slide.advisor.name}</h4>
-                <p className="text-[0.6rem] tracking-[0.4em] uppercase text-[#c8a96e] mb-10">{slide.advisor.designation}</p>
+                {/* FIX: optional chaining on all advisor properties */}
+                <h4 className="serif-font text-3xl text-white mb-1">{slide.advisor?.name}</h4>
+                <p className="text-[0.6rem] tracking-[0.4em] uppercase text-[#c8a96e] mb-10">{slide.advisor?.designation}</p>
                 <div className="flex flex-col md:flex-row gap-6">
                   <a 
-                    href={slide.advisor.whatsapp} 
+                    href={slide.advisor?.whatsapp} 
                     target="_blank" 
                     rel="noopener noreferrer" 
                     className="flex items-center gap-4 bg-[#c8a96e] text-[#080a06] px-10 py-5 text-[0.65rem] tracking-[0.3em] uppercase font-bold hover:bg-[#e2c98a] transition-all transform hover:-translate-y-1 shadow-lg"
@@ -613,7 +615,7 @@ const App = () => {
                     <MessageCircle size={20} fill="currentColor" /> Contact on WhatsApp
                   </a>
                   <a 
-                    href={`tel:${slide.advisor.phone.replace(/\s+/g, '')}`}
+                    href={`tel:${slide.advisor?.phone.replace(/\s+/g, '')}`}
                     className="border border-[#c8a96e]/30 px-10 py-5 flex items-center gap-4 text-[0.65rem] tracking-[0.3em] uppercase text-[#ede0c4] bg-[#c8a96e]/5 hover:bg-[#c8a96e]/10 transition-all cursor-pointer shadow-lg"
                   >
                     <Phone size={18} /> Call Advisor
@@ -704,48 +706,24 @@ const App = () => {
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
         .interactive-watermark-bar {
-          position: fixed;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          width: 50px;
-          z-index: 1000;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          position: fixed; top: 0; right: 0; bottom: 0; width: 50px; z-index: 1000;
+          display: flex; align-items: center; justify-content: center;
           background: linear-gradient(to left, rgba(200, 169, 110, 0.08), transparent);
           border-left: 1px solid rgba(200, 169, 110, 0.15);
-          backdrop-filter: blur(2px);
-          transition: all 0.4s ease;
-          text-decoration: none !important;
+          backdrop-filter: blur(2px); transition: all 0.4s ease; text-decoration: none !important;
         }
-
         .interactive-watermark-bar:hover {
-          width: 60px;
-          background: linear-gradient(to left, rgba(200, 169, 110, 0.15), transparent);
+          width: 60px; background: linear-gradient(to left, rgba(200, 169, 110, 0.15), transparent);
           border-left: 1px solid rgba(200, 169, 110, 0.4);
         }
-
         .watermark-content {
-          transform: rotate(90deg);
-          white-space: nowrap;
-          display: flex;
-          align-items: center;
-          gap: 1.5rem;
-          color: rgba(200, 169, 110, 0.6);
-          transition: color 0.4s ease;
+          transform: rotate(90deg); white-space: nowrap; display: flex; align-items: center;
+          gap: 1.5rem; color: rgba(200, 169, 110, 0.6); transition: color 0.4s ease;
         }
-
-        .interactive-watermark-bar:hover .watermark-content {
-          color: var(--gold-light);
-        }
-
+        .interactive-watermark-bar:hover .watermark-content { color: var(--gold-light); }
         .watermark-label {
-          font-family: 'Montserrat', sans-serif;
-          font-weight: 100;
-          font-size: 0.75rem;
-          letter-spacing: 0.8em;
-          text-transform: uppercase;
+          font-family: 'Montserrat', sans-serif; font-weight: 100;
+          font-size: 0.75rem; letter-spacing: 0.8em; text-transform: uppercase;
         }
       `}</style>
 
@@ -762,19 +740,14 @@ const App = () => {
       <div className="bg-ring-1" />
       <div className="bg-ring-2" />
       
-      {/* Global header with transparency and navigation integration */}
       {view === 'presentation' && (
         <header className="fixed top-0 left-0 w-full p-8 pr-20 z-50 flex justify-between items-center bg-[#080a06]/40 backdrop-blur-md border-b border-[#c8a96e]/10 shadow-lg">
           <div className="serif-font text-xl tracking-[0.2em] text-[#c8a96e] uppercase font-light">Binghatti</div>
-          
-          {/* Middle: Progress Indicators */}
           <div className="flex gap-3">
             {slides.map((_, i) => (
               <div key={i} className={`h-[1px] transition-all duration-500 ${currentSlide === i ? 'w-12 bg-[#c8a96e]' : 'w-4 bg-[#c8a96e]/30'}`} />
             ))}
           </div>
-
-          {/* Right: Integrated Arrows */}
           <div className="flex gap-4">
             <button onClick={handlePrev} className="nav-btn w-10 h-10 rounded-full flex items-center justify-center text-[#c8a96e] border border-[#c8a96e]/30 bg-black/40"><ChevronLeft size={18} /></button>
             <button onClick={handleNext} className="nav-btn w-10 h-10 rounded-full flex items-center justify-center text-[#c8a96e] border border-[#c8a96e]/30 bg-black/40"><ChevronRight size={18} /></button>
