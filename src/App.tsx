@@ -453,6 +453,7 @@ const App = () => {
                         <th className="py-4 px-5 text-[0.5rem] tracking-[0.2em] uppercase text-[#c8a96e]">Type</th>
                         <th className="py-4 px-5 text-[0.5rem] tracking-[0.2em] uppercase text-[#c8a96e] text-right">Price (AED)</th>
                         <th className="py-4 px-5 text-[0.5rem] tracking-[0.2em] uppercase text-[#c8a96e] text-right">BUA</th>
+                        <th className="py-4 px-5 text-[0.5rem] tracking-[0.2em] uppercase text-[#c8a96e] text-right">Plot</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -461,6 +462,7 @@ const App = () => {
                           <td className="py-4 px-5 text-[0.65rem] sm:text-xs text-[#ede0c4] whitespace-nowrap">{row.type}</td>
                           <td className="py-4 px-5 text-sm sm:text-base text-[#c8a96e] text-right serif-font">{row.priceRange}</td>
                           <td className="py-4 px-5 text-[0.6rem] sm:text-[0.7rem] text-[#ede0c4]/60 text-right">{row.bua}</td>
+                          <td className="py-4 px-5 text-[0.6rem] sm:text-[0.7rem] text-[#ede0c4]/60 text-right">{row.plot}</td>
                         </tr>
                       ))}
                     </tbody>
