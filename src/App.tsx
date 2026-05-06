@@ -29,7 +29,7 @@ const App = () => {
   const [view, setView] = useState('presentation'); // 'presentation' | 'details'
   
   // Modal State for Images
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   
   // Presentation States
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -260,7 +260,8 @@ const App = () => {
     setTimeout(() => setIsAnimating(false), 800);
   };
 
-  const openDetailsPage = (villaType) => {
+  // FIX 1: added explicit type to villaType parameter
+  const openDetailsPage = (villaType: 'oasis' | 'dunes') => {
     setActiveVilla(villaType);
     setView('details');
   };
@@ -496,7 +497,7 @@ const App = () => {
             {/* Collections Slide */}
             {slide.id === 'collections' && (
               <div className="w-full mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-4xl mx-auto px-4">
-                {['oasis', 'dunes'].map((villa) => (
+                {(['oasis', 'dunes'] as const).map((villa) => (
                   <div 
                     key={villa}
                     onClick={() => setActiveVilla(villa)}
@@ -567,7 +568,7 @@ const App = () => {
 
   // --- RENDER COMPONENT: DETAILS PAGE ---
   const renderDetailsPage = () => {
-    const isOasis = activeVilla === 'oasis';
+    // FIX 2: removed unused isOasis variable
     const features = [
       { icon: <Home size={18} />, title: "4 Bedrooms", sub: "Attached Baths" },
       { icon: <Layers size={18} />, title: "G+2+Roof", sub: "Multi-Level" },
